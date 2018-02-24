@@ -1,0 +1,124 @@
+#include <iostream>
+    using namespace std;
+
+    struct node{
+        char data;
+        node* next = NULL;
+    };
+
+    class queue {
+        node* head;
+        node* tail;
+
+        public:
+
+        queue():head(NULL), tail(NULL){
+            head = tail;
+            }
+
+        void Push(char new_data){
+            if (head == NULL) {
+                    node* temp = new node;
+                    head = temp;
+                    temp -> data = new_data;
+
+            }
+            else {
+                node* temp = head;
+                while (temp -> next != NULL)
+                    temp = temp -> next;
+                temp -> next = new node;
+                temp -> next -> data = new_data;}
+
+        }
+
+        queue (queue&A) {
+            head=NULL;
+            node* temp = A.head;
+            while(temp){
+                Push(temp->data);
+                temp = temp->next;
+            }
+        }
+
+
+        char Pop(){
+        if (head == NULL){
+            cout << " Stack is empty ";
+            return 0;
+        }
+        else {
+            node* temp = head;
+            head = head -> next;
+            double data = temp->data;
+            delete temp;
+            return data;
+        }
+        }
+
+        char front(queue& A){
+            if (head == NULL){
+                cout << " Stack is empty ";
+                return 0;
+        }
+        else {
+            node* temp = head;
+            while (temp -> next != NULL)
+                    temp = temp -> next;
+            char data = temp->data;
+            delete temp;
+            return data;
+        }
+        }
+
+        bool Empty(){
+            if (head==0)
+                return 1;
+            else
+                return 0;
+        }
+
+        void print(){
+            node* temp = head;
+            while(temp){
+                cout << temp -> data << " ";
+                temp = temp -> next;
+        }
+        }
+
+
+        ~queue(){
+             node *temp = head;
+             while (temp!=NULL){
+                  head = head->next;
+                  delete temp;
+                  temp = head;
+             }
+        }
+        };
+
+
+
+    int main(){
+        char x; ;
+        queue Q;
+        Q.Push('a');
+        Q.Push('b');
+        Q.Push('c');
+        Q.Push('d');
+        Q.Push('e');
+        Q.Pop();
+        Q.print();
+        cout << endl;
+        if (Q.Empty()==1)
+            cout << "Q is empty";
+        else
+            cout << "Q has elements ";
+        cout << endl;
+        queue Copy(Q);
+        Q.print ();
+        cout << endl;
+        cout << Q.Pop() << endl;
+        cout << Q.front(Q) << endl;
+        return 0;
+    }
