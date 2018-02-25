@@ -1,0 +1,116 @@
+    #include <iostream>
+    using namespace std;
+
+     struct  node{
+       long long int data;
+       node* next;
+       node* prev;
+     };
+
+     class deque{
+          node* head;
+          node* tail;
+
+      public:
+
+        deque(): head(NULL), tail(NULL){}
+
+        deque(deque&A){
+            head = A.head;
+            tail = A.tail;
+            node* temp = A.head;
+            node* temp1 = A.tail;
+                while(temp -> next != tail){
+                    push_front (temp -> data);
+                    push_back (temp1 -> data);
+                    temp = temp -> next;
+                    temp1 = temp1 -> next;
+                }
+            }
+
+        void push_front(long long int x){
+            node* temp = new node;
+            head -> prev = temp;
+            temp -> next = head;
+            temp -> data = x;
+            head = temp;
+            }
+
+        void push_back(long long int x){
+            node* temp = new node;
+            temp -> prev = tail;
+            head -> next = temp;
+            temp -> data = x;
+            tail = temp;
+            }
+
+        long long int pop_front(){
+            node* temp = head;
+            head = head -> next;
+            return temp -> data;
+        }
+
+        long long int pop_back (){
+            node* temp = tail;
+            tail = tail -> prev;
+            return temp -> data;
+        }
+
+        bool empty (){
+            if (head == NULL && tail == NULL)
+                return 1;
+            else
+                return 0;
+             }
+
+        long long int front (){
+            return head -> data;
+            }
+
+        long long int back (){
+            return tail -> data;
+            }
+
+        ~deque(){
+            node* p = head;
+            while (head -> next != p){
+                node* temp = head -> next;
+                delete head;
+                head = temp;
+            }
+        }
+
+        void print (){
+            node* temp = tail;
+            while (temp != head ){
+                    cout << temp -> data << " ";
+                    temp = temp -> prev;
+            }
+            cout << temp -> data;
+        }
+    };
+
+
+
+
+
+
+    int main(){
+        deque deq;
+        deq.push_front(1);
+        deq.push_back(2);
+        deq.push_front(3);
+        deq.print();
+        deque DEQ(deq);
+        cout << endl;
+        deq.pop_front();
+        deq.print();
+        cout << endl;
+        deq.push_back(3);
+        deq.print();
+        cout << endl;
+        DEQ.print();
+        cout << endl;
+        deq.pop_back();
+        deq.print();
+    }
