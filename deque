@@ -13,20 +13,25 @@
 
       public:
 
-        deque(): head(NULL), tail(NULL){}
+        deque(long long x = 0): head(new node), tail(NULL){
+            head -> data = x;
+            tail = head;
+        }
 
-        deque(deque&A){
-            head = A.head;
-            tail = A.tail;
-            node* temp = A.head;
-            node* temp1 = A.tail;
-                while(temp -> next != tail){
-                    push_front (temp -> data);
-                    push_back (temp1 -> data);
-                    temp = temp -> next;
-                    temp1 = temp1 -> next;
+        deque(const deque &A){
+            node* p = A.head;
+            if (A.tail != NULL){
+                node* temp = new node;
+                temp -> data = A.head -> data;
+                tail = temp;
+                head = temp;
+                p = p -> next;
+                while (p != NULL){
+                    push_back (p -> data);
+                    p = p -> next;
                 }
             }
+        }
 
         void push_front(long long int x){
             node* temp = new node;
@@ -36,25 +41,46 @@
             head = temp;
             }
 
+
         void push_back(long long int x){
             node* temp = new node;
             temp -> prev = tail;
-            head -> next = temp;
+            tail -> next = temp;
             temp -> data = x;
             tail = temp;
+            temp -> next = NULL;
             }
 
+
         long long int pop_front(){
-            node* temp = head;
-            head = head -> next;
-            return temp -> data;
+            if (head != NULL){
+                node* temp = head;
+                if (head != tail) {
+                    head = temp -> next;
+                    head->prev = NULL;
+                    return temp -> data;
+            }
+            }
         }
 
+
         long long int pop_back (){
-            node* temp = tail;
-            tail = tail -> prev;
-            return temp -> data;
+            if (tail != NULL){
+                node* temp = tail;
+                if (head == tail){
+                    head = NULL;
+                    tail = head;
+                    return temp -> data;
+                    }
+                else {
+                    tail = temp -> prev;
+                    return temp -> data;
+                    tail -> next = NULL;
+                    }
+            }
         }
+
+
 
         bool empty (){
             if (head == NULL && tail == NULL)
@@ -64,23 +90,34 @@
              }
 
         long long int front (){
+            if (head == NULL){
+            return 0;
+            }
             return head -> data;
             }
 
         long long int back (){
+            if (head == NULL){
+            return 0;
+            }
             return tail -> data;
             }
 
         ~deque(){
-            node* p = head;
-            while (head -> next != p){
+            while (head != tail){
                 node* temp = head -> next;
                 delete head;
                 head = temp;
+                head -> prev = NULL;
             }
+            node* temp = head;
+            delete temp;
+            head = NULL;
+            tail = head;
         }
 
         void print (){
+            cout << endl;
             node* temp = tail;
             while (temp != head ){
                     cout << temp -> data << " ";
@@ -98,19 +135,17 @@
     int main(){
         deque deq;
         deq.push_front(1);
-        deq.push_back(2);
+        deq.push_front(2);
         deq.push_front(3);
         deq.print();
         deque DEQ(deq);
-        cout << endl;
+        DEQ.print();
+        DEQ.pop_front();
+        DEQ.print();
         deq.pop_front();
         deq.print();
-        cout << endl;
         deq.push_back(3);
         deq.print();
-        cout << endl;
-        DEQ.print();
-        cout << endl;
         deq.pop_back();
         deq.print();
     }
