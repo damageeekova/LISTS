@@ -1,9 +1,9 @@
-#include <iostream>
+    #include <iostream>
     using namespace std;
 
     struct node{
         char data;
-        node* next = NULL;
+        node* next;
     };
 
     class queue {
@@ -12,64 +12,75 @@
 
         public:
 
-        queue():head(NULL), tail(NULL){
-            head = tail;
-            }
+        queue():head(NULL), tail(NULL){}
 
-        void Push(char new_data){
+        void Push(char x){
             if (head == NULL) {
-                    node* temp = new node;
-                    head = temp;
-                    temp -> data = new_data;
-
+                node* temp = new node;
+                temp -> data = x;
+                head = temp;
+                tail = head;
             }
             else {
                 node* temp = head;
-                while (temp -> next != NULL)
+                while (temp -> next)
                     temp = temp -> next;
                 temp -> next = new node;
-                temp -> next -> data = new_data;}
-
+                temp -> next -> data = x;
+                tail = temp -> next;
+            }
         }
 
         queue (queue&A) {
-            head=NULL;
-            node* temp = A.head;
-            while(temp){
-                Push(temp->data);
-                temp = temp->next;
+            node* p = A.head;
+            if (A.head != NULL){
+                head = A.head;
+                node* temp = new node;
+                temp -> data = A.head -> data;
+                tail = temp;
+                head = tail;
+                p = p -> next;
+                while(p != NULL){
+                    Push(p -> data);
+                    p = p -> next;
+                }
             }
         }
 
 
         char Pop(){
-        if (head == NULL){
-            cout << " Stack is empty ";
-            return 0;
-        }
-        else {
-            node* temp = head;
-            head = head -> next;
-            double data = temp->data;
-            delete temp;
-            return data;
-        }
+            if (head == NULL){
+                cout << " Queue is empty ";
+                return 0;
+            }
+            else {
+                node* temp = head;
+                head = head -> next;
+                double data = temp->data;
+                delete temp;
+                return data;
+            }
         }
 
-        char front(queue& A){
+        char front(){
             if (head == NULL){
-                cout << " Stack is empty ";
+                cout << " Queue is empty ";
                 return 0;
+            }
+            else
+                return head -> data;
         }
-        else {
-            node* temp = head;
-            while (temp -> next != NULL)
-                    temp = temp -> next;
-            char data = temp->data;
-            delete temp;
-            return data;
+
+
+        char back(){
+            if (head == NULL){
+                cout << " Queue is empty ";
+                return 0;
+            }
+            else
+                return tail -> data;
         }
-        }
+
 
         bool Empty(){
             if (head==0)
@@ -79,12 +90,14 @@
         }
 
         void print(){
+            cout << endl;
             node* temp = head;
-            while(temp){
+            while(temp != NULL){
                 cout << temp -> data << " ";
                 temp = temp -> next;
+            }
         }
-        }
+
 
 
         ~queue(){
@@ -100,25 +113,25 @@
 
 
     int main(){
-        char x; ;
         queue Q;
         Q.Push('a');
         Q.Push('b');
         Q.Push('c');
         Q.Push('d');
         Q.Push('e');
-        Q.Pop();
+        Q.Push('f');
         Q.print();
-        cout << endl;
-        if (Q.Empty()==1)
-            cout << "Q is empty";
-        else
-            cout << "Q has elements ";
-        cout << endl;
-        queue Copy(Q);
+        Q.Pop();
         Q.print ();
-        cout << endl;
-        cout << Q.Pop() << endl;
-        cout << Q.front(Q) << endl;
+        if (Q.Empty()==1)
+            cout << endl << "Q is empty";
+        else
+            cout << endl << "Q has elements ";
+        queue Copy(Q);
+        Copy.print();
+        Copy.Pop();
+        Copy.print();
+        cout << endl << Q.front();
+        cout << endl << Q.back();
         return 0;
-    }
+    };
